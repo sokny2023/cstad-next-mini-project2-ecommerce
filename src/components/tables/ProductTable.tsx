@@ -51,6 +51,31 @@ const ProductTable = () => {
     
   }
 
+  //const [products, setProducts] = useState<ProductType[]>([]);
+
+  async function deleteProduct(id: string) {
+    const response = await fetch(`https://store.istad.co/api/products/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete product');
+    }
+    // Product deletion logic
+  }
+
+  const handleDeleteProduct = async (id: string) => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      try {
+        await deleteProduct(id);
+        // Refresh the product list upon successful deletion
+        const updatedProducts = getProduct.filter(product => product.id !== id);
+        setProduct(updatedProducts);
+      } catch (error) {
+        console.error('Failed to delete product:', error);
+      }
+    }
+  };
+
   const columnsData: TableColumn<ProductType>[] = [
     {
       name: "ID",
@@ -96,12 +121,11 @@ const ProductTable = () => {
 
                 <DropdownItem key="edit">Edit</DropdownItem>
                 <DropdownItem
-                  key="delete"
-                  className="text-danger"
-                  color="danger"
-                >
-                  Delete
-                </DropdownItem>
+                key="delete"
+                onClick={() => handleDeleteProduct(row.id)}
+              >
+                Delete
+              </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>

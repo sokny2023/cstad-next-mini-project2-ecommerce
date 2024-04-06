@@ -19,18 +19,18 @@ const customStyles = {
   rows: {
     style: {
       // minWidth: "1000px",
-      minHeight: "72px", // override the row height
+      minHeight: "72px", 
     },
   },
   headCells: {
     style: {
-      paddingLeft: "8px", // override the cell padding for head cells
+      paddingLeft: "8px", 
       paddingRight: "8px",
     },
   },
   cells: {
     style: {
-      paddingLeft: "8px", // override the cell padding for data cells
+      paddingLeft: "8px", 
       paddingRight: "8px",
     },
   },
@@ -38,10 +38,10 @@ const customStyles = {
 
 const url_based = "https://store.istad.co/api/products/";
 const ProductTable = () => {
-  const [getProduct, setProduct] = useState([]);
+  const [getProduct, setProduct] = useState<ProductType[]>([]);  
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState([]);
+  const [filter, setFilter] = useState<ProductType[]>([]);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [productDetail, setProductDetail] = useState({} as ProductType)
 
@@ -51,8 +51,7 @@ const ProductTable = () => {
     
   }
 
-  //const [products, setProducts] = useState<ProductType[]>([]);
-
+ // delete
   async function deleteProduct(id: string) {
     const response = await fetch(`https://store.istad.co/api/products/${id}`, {
       method: 'DELETE',
@@ -60,15 +59,14 @@ const ProductTable = () => {
     if (!response.ok) {
       throw new Error('Failed to delete product');
     }
-    // Product deletion logic
+  
   }
 
   const handleDeleteProduct = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
         await deleteProduct(id);
-        // Refresh the product list upon successful deletion
-        const updatedProducts = getProduct.filter(product => product.id !== id);
+        const updatedProducts = getProduct.filter(product => product.id !== id) ;
         setProduct(updatedProducts);
       } catch (error) {
         console.error('Failed to delete product:', error);
@@ -122,7 +120,7 @@ const ProductTable = () => {
                 <DropdownItem key="edit">Edit</DropdownItem>
                 <DropdownItem
                 key="delete"
-                onClick={() => handleDeleteProduct(row.id)}
+                // onClick={() => handleDeleteProduct(row.id)}
               >
                 Delete
               </DropdownItem>

@@ -26,13 +26,13 @@ export default function NavbarComponent() {
             Home
           </Navbar.Link>
           <Navbar.Link
-            href="#"
+            href="./about-us"
             className="text-[18px] text-gray-800 hover:text-emerald-600"
           >
             About Us
           </Navbar.Link>
           <Navbar.Link
-            href="#"
+            href="./policy"
             className="text-[18px] text-gray-800 hover:text-emerald-600"
           >
             Policy

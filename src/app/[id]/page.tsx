@@ -30,15 +30,16 @@ async function page({ params }: ParamProps) {
   const id = params.id;
   const productDetail = await getDetail(id);
   return (
-    // <div className="flex justify-center items-center">
-    //   <CardProductDetail
-    //     name={productDetail.name}
-    //     price={productDetail.price}
-    //     image={productDetail.image}
-    //     desc={productDetail.desc}
-    //   />
-    // </div>
-    <></>
+    <>
+      <div className="flex justify-center items-center">
+      <CardProductDetail
+        name={productDetail.name}
+        price={productDetail.price}
+        image={productDetail.image}
+        desc={productDetail.desc}
+      />
+    </div>
+    </>
   );
 }
 

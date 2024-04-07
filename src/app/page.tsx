@@ -9,7 +9,7 @@ import Link from "next/link";
 
 async function fetchProduct() {
   const product = await fetch(
-    "https://store.istad.co/api/products/",
+    "https://store.istad.co/api/products/?page=1&page_size=50",
     {
       cache: "no-store",
     }

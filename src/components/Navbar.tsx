@@ -18,7 +18,7 @@ export default function NavbarComponent() {
           </span>
         </Navbar.Brand>
         <div className="flex md:order-2">
-          <Button className="bg-emerald-600 ">Dashboard</Button>
+          <Button className="bg-emerald-600 ">Login</Button>
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>

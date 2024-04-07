@@ -4,16 +4,16 @@ import React from "react";
 const CardProductDetail = ({ name, desc, price, image }: ProductType) => {
   return (
     <div>
-      <div className="flex-col md:flex-row justify-between flex gap-4 items-start mx-4 py-12">
+      <div className="max-w-[300px] md:max-w-[800px] flex-col md:flex-row justify-between flex gap-4 items-start mx-4 py-12">
         <div className="flex bg-white rounded-lg shadow dark:bg-gray-800 flex-col md:flex-row">
-          <div className="relative w-full md:w-48 flex justify-center items-center">
+          <div className="w-[50%] relative md:w-48 flex justify-center items-center">
             <img
               src={image}
               alt={name}
               className="object-cover w-full h-48 md:h-full rounded-t-lg md:rounded-l-lg md:rounded-t-none"
             />
           </div>
-          <form className="flex-auto p-6">
+          <form className="w-[50%] flex-auto p-6">
             <div className="flex flex-wrap">
               <h1 className="flex-auto text-xl font-semibold dark:text-gray-50">
                 {name}

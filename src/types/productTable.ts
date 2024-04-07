@@ -1,4 +1,4 @@
-export type ProductTableType = {
+export​ type ProductTableType = {
     id: string,
     name: string,
     desc: string,

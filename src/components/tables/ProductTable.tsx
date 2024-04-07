@@ -6,13 +6,10 @@ import { BiDetail } from "react-icons/bi";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
-} from "@nextui-org/react";
+import { Button } from "flowbite-react";
+//import { useState } from "react";
+
+
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
@@ -50,11 +47,12 @@ const ProductTable = () => {
   const [filter, setFilter] = useState<ProductTableType[]>([]);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [productDetail, setProductDetail] = useState({} as ProductTableType)
+  const [openModal, setOpenModal] = useState(false);
+
 
   function handleDetail(value: ProductTableType) {
     onOpen();
     setProductDetail(value)
-    
   }
 
   const columnsData: TableColumn<ProductTableType>[] = [
@@ -84,7 +82,7 @@ const ProductTable = () => {
     {
       name: "Details",
       cell: (row) => (
-        <button onClick={() => handleView(row)}><BiDetail /></button>
+        <button onClick={() => handleDetail(row)}><BiDetail /></button>
       ),
     },
     {
@@ -96,26 +94,49 @@ const ProductTable = () => {
     {
       name: "Delete",
       cell: (row) => (
-        <button onClick={() => handleDelete(row)}><MdDelete /></button>
+        <button onClick={() => handleDelete(row.id)} style={{ cursor: 'pointer', color: 'red', border: 'none', background: 'none' }}>
+          <MdDelete />
+        </button>
       ),
     },
+    
   ];
 
   const handleView = (product: ProductTableType) => {
-    <Link href={`/${product.id}`}>
-
-    </Link>
+    router.push(`/${product.id}`);
   };
 
   
+  // const handleEdit = (product: ProductTableType) => {
+  //   router.push(`/${product.id}`);
+  // };
+
   const handleEdit = (product: ProductTableType) => {
-    router.push(`/${product.id}`);
+    //setEditProduct(product);
+    setOpenModal(true); 
+   };
+   
+
+  
+
+  const handleDelete = async (id: string) => {
+    // Confirm deletion
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+  
+    const response = await fetch(`https://store.istad.co/api/products/${id}`, {
+      method: 'DELETE',
+    });
+    setProduct(prevProducts => prevProducts.filter(product => product.id !== id));
+  
+    if (response.ok) {
+      setProduct(prevProducts => prevProducts.filter(product => product.id !== id));
+      alert('Product deleted successfully');
+    } else {
+      console.error("Error deleting product:", response.statusText);
+      alert('Failed to delete the product');
+    }
   };
   
-  const handleDelete = (product: ProductTableType) => {
-    router.push(`/${product.id}`);
-  };
-
   useEffect(() => {
     async function fetchData() {
       const data = await fetch(url_based);
@@ -144,10 +165,12 @@ const ProductTable = () => {
     selectAllRowsItem: true,
     selectAllRowsItemText: "ទាំងអស់",
   };
+  
 
   return (
     <div className="w-full">
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      
+      {/* <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
@@ -160,14 +183,12 @@ const ProductTable = () => {
                   {productDetail.price}
                 </p>
                 <Image src={productDetail.image} width={100} height={100} alt="user" />
-                <p>detals</p>
-                <p>edit</p>
-                <p>delte</p>
+                
               </ModalBody>
             </>
           )}
         </ModalContent>
-      </Modal>
+      </Modal> */}
    
       <DataTable
         progressPending={isLoading}

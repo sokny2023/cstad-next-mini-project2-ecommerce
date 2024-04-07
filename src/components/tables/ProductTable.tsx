@@ -1,6 +1,11 @@
 "use client";
 import LoadingComponent from "@/app/Loading";
 import React from "react";
+import router from "next/router";
+import { BiDetail } from "react-icons/bi";
+import { CiEdit } from "react-icons/ci";
+import { MdDelete } from "react-icons/md";
+
 import {
   Dropdown,
   DropdownTrigger,
@@ -13,7 +18,8 @@ import { useState, useEffect } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import Image from "next/image";
-import { ProductType } from "@/types/product";
+import { ProductTableType } from "@/types/productTable";
+import Link from "next/link";
 
 const customStyles = {
   rows: {
@@ -38,43 +44,20 @@ const customStyles = {
 
 const url_based = "https://store.istad.co/api/products/";
 const ProductTable = () => {
-  const [getProduct, setProduct] = useState<ProductType[]>([]);  
+  const [getProduct, setProduct] = useState<ProductTableType[]>([]);  
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<ProductType[]>([]);
+  const [filter, setFilter] = useState<ProductTableType[]>([]);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
-  const [productDetail, setProductDetail] = useState({} as ProductType)
+  const [productDetail, setProductDetail] = useState({} as ProductTableType)
 
-  function handleDetail(value: ProductType) {
+  function handleDetail(value: ProductTableType) {
     onOpen();
     setProductDetail(value)
     
   }
 
- // delete
-  async function deleteProduct(id: string) {
-    const response = await fetch(`https://store.istad.co/api/products/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to delete product');
-    }
-  
-  }
-
-  const handleDeleteProduct = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      try {
-        await deleteProduct(id);
-        const updatedProducts = getProduct.filter(product => product.id !== id) ;
-        setProduct(updatedProducts);
-      } catch (error) {
-        console.error('Failed to delete product:', error);
-      }
-    }
-  };
-
-  const columnsData: TableColumn<ProductType>[] = [
+  const columnsData: TableColumn<ProductTableType>[] = [
     {
       name: "ID",
       selector: (row): any => (
@@ -99,38 +82,39 @@ const ProductTable = () => {
       ),
     },
     {
-      name: "Action",
-      cell: (row) => {
-        return (
-          <div>
-            <Dropdown>
-              <DropdownTrigger>
-                <button>
-                  <IoEllipsisHorizontal />
-                </button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Static Actions">
-                <DropdownItem
-                  key="detail"
-                  onClick={()=> handleDetail(row)}
-                >
-                  View Detail
-                </DropdownItem>
-
-                <DropdownItem key="edit">Edit</DropdownItem>
-                <DropdownItem
-                key="delete"
-                // onClick={() => handleDeleteProduct(row.id)}
-              >
-                Delete
-              </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
-      },
+      name: "Details",
+      cell: (row) => (
+        <button onClick={() => handleView(row)}><BiDetail /></button>
+      ),
+    },
+    {
+      name: "Edit",
+      cell: (row) => (
+        <button onClick={() => handleEdit(row)}><CiEdit /></button>
+      ),
+    },
+    {
+      name: "Delete",
+      cell: (row) => (
+        <button onClick={() => handleDelete(row)}><MdDelete /></button>
+      ),
     },
   ];
+
+  const handleView = (product: ProductTableType) => {
+    <Link href={`/${product.id}`}>
+
+    </Link>
+  };
+
+  
+  const handleEdit = (product: ProductTableType) => {
+    router.push(`/${product.id}`);
+  };
+  
+  const handleDelete = (product: ProductTableType) => {
+    router.push(`/${product.id}`);
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -148,7 +132,7 @@ const ProductTable = () => {
       setFilter(getProduct);
       return;
     }
-    const result = getProduct.filter((item: ProductType) => {
+    const result = getProduct.filter((item: ProductTableType) => {
       return item.name?.toLowerCase().includes(search.toLowerCase());
     });
     setFilter(result);
@@ -160,7 +144,6 @@ const ProductTable = () => {
     selectAllRowsItem: true,
     selectAllRowsItemText: "ទាំងអស់",
   };
-
 
   return (
     <div className="w-full">
@@ -177,14 +160,15 @@ const ProductTable = () => {
                   {productDetail.price}
                 </p>
                 <Image src={productDetail.image} width={100} height={100} alt="user" />
-              
+                <p>detals</p>
+                <p>edit</p>
+                <p>delte</p>
               </ModalBody>
             </>
           )}
         </ModalContent>
       </Modal>
    
-
       <DataTable
         progressPending={isLoading}
         columns={columnsData}
@@ -207,11 +191,11 @@ const ProductTable = () => {
         progressComponent={<LoadingComponent />}
         customStyles={customStyles}
         data={filter}
-        actions={
-          <Button size="sm" color="primary">
-            Export PDF
-          </Button>
-        }
+        // actions={
+        //   <Button size="sm" color="primary">
+        //     Export PDF
+        //   </Button>
+        // }
       />
     </div>
   );

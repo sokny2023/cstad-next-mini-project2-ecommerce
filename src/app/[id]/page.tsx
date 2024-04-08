@@ -37,6 +37,9 @@ async function page({ params }: ParamProps) {
         price={productDetail.price}
         image={productDetail.image}
         desc={productDetail.desc}
+        seller={productDetail.seller}
+        category={productDetail.category}
+        quantity={productDetail.quantity}
       />
     </div>
     </>

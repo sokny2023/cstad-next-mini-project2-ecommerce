@@ -7,8 +7,10 @@ import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 
 import { Button } from "flowbite-react";
+//import React, { useState } from 'react';
 //import { useState } from "react";
 
+import { ProductDetailType } from "@/types/productDetail";
 
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
 import { useState, useEffect } from "react";
@@ -102,9 +104,30 @@ const ProductTable = () => {
     
   ];
 
-  const handleView = (product: ProductTableType) => {
-    router.push(`/${product.id}`);
-  };
+  // const handleView = (product: ProductTableType) => {
+  //   router.push(`/${product.id}`);
+  // };
+
+  const handleView = ({ name, desc, price, image, seller, category, quantity }: ProductDetailType) => {
+    // State to manage modal visibility
+    const [isModalOpen, setIsModalOpen] = useState(false);
+   
+    // Function to open the modal
+    const openModal = () => {
+       setIsModalOpen(true);
+    };
+   
+    // Function to close the modal
+    const closeModal = () => {
+       setIsModalOpen(false);
+    };
+   
+    return (
+       <>
+        
+       </>
+    );
+   };
 
   
   // const handleEdit = (product: ProductTableType) => {
@@ -165,6 +188,8 @@ const ProductTable = () => {
     selectAllRowsItem: true,
     selectAllRowsItemText: "ទាំងអស់",
   };
+
+  
   
 
   return (

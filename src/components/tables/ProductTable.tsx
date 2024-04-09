@@ -139,24 +139,22 @@ const ProductTable = () => {
     setOpenModal(true); 
    };
    
-
-  
-
-  const handleDelete = async (id: string) => {
-    // Confirm deletion
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
-  
-    const response = await fetch(`https://store.istad.co/api/products/${id}`, {
-      method: 'DELETE',
+   const handleDelete = async (id: string) => {
+    const deleteUrl = `${url_based}${id}/`;
+    const response = await fetch(deleteUrl, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0MjgxMjU2LCJpYXQiOjE3MTIxMjEyNTYsImp0aSI6ImIyN2U5Mzg3MWQ5ZTRkZmY4YjEwNmMzMWIzYzZjMmUyIiwidXNlcl9pZCI6NDB9.U4cbsLkoivETDY_SbRMJM7YxMlPCgJy6hzxVHV7OBfU`,
+        "Content-Type": "application/json", 
+      },
     });
-    setProduct(prevProducts => prevProducts.filter(product => product.id !== id));
-  
     if (response.ok) {
-      setProduct(prevProducts => prevProducts.filter(product => product.id !== id));
-      alert('Product deleted successfully');
+      const updatedProduct = getProduct.filter((product) => product.id !== id);
+      setProduct(updatedProduct);
+      setFilter(updatedProduct);
+      alert("Product deleted successfully!");
     } else {
-      console.error("Error deleting product:", response.statusText);
-      alert('Failed to delete the product');
+      alert("Failed to delete product.");
     }
   };
   
@@ -190,30 +188,8 @@ const ProductTable = () => {
   };
 
   
-  
-
   return (
     <div className="w-full">
-      
-      {/* <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
-              <ModalBody>
-                <p> 
-                  {productDetail.name}
-                </p>
-                <p>
-                  {productDetail.price}
-                </p>
-                <Image src={productDetail.image} width={100} height={100} alt="user" />
-                
-              </ModalBody>
-            </>
-          )}
-        </ModalContent>
-      </Modal> */}
    
       <DataTable
         progressPending={isLoading}
